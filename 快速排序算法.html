@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<style type="text/css">
+			.column{
+				background:#AAD2F0;
+				width:20px;
+				border:1px solid black;
+				margin:2px;
+				display: inline-block;
+			}
+			.col_show {
+				-webkit-animation: showIn 2s linear;
+				animation: showIn 2s linear;
+				
+			}
+			.playwhere{
+				height:100px;
+				
+			}
+			.btn {
+				width:100px;
+				height:50px;
+				margin-top:40px;
+				background: #AAD2F0;
+				color:#888;
+				cursor: pointer;
+				border: none;
+			}
+			.btn:hover{
+				background: red;
+				color:white;
+			}
+			@-webkit-keyframes showIn {
+				0%{background:#AAD2F0;}
+				100%{background:red};
+			}
+			@keyframes showIn {
+				0%{background:#AAD2F0;}
+				100%{background:red};
+			}
+		</style>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div class="playLocal">
+			<div class="column clo "></div>
+			<div class="column clo"></div>
+			<div class="column clo"></div>
+			<div class="column clo"></div>
+			<div class="column clo"></div>
+			<div class="column clo"></div>
+			<div class="column clo"></div>
+			<div class="column clo"></div>
+			<div class="column clo"></div>
+			<div class="column clo"></div>
+		</div>
+		<div class="playwhere">
+			
+		</div>
+
+		<!--柱状图区域结束-->
+		<!--开始按钮-->
+		<button class="btn">快速排序法</button>
+	</body>
+		<script type="text/javascript">
+			var arrHeight = [85,40,28,30,40,50,25,27,52,33];
+			var num = 0;
+			for(var i=0;i<arrHeight.length;i++){
+				$(".clo").eq(i).css({
+					height:arrHeight[i]
+				}).html(arrHeight[i]);
+				
+			}
+			
+			var sortVal = quick_sort(arrHeight,1);
+			$(".btn").click (function(){
+				$(".playwhere").html(" ");
+				clearInterval(timer);
+				$(".btn").attr("disabled","disabled");
+				var timer = setInterval(function(){
+					
+					$(".playwhere").append('<div class="column clo_add" style="height:'+sortVal[num]+'px"></div>')
+					$(".clo_add").eq(num).css({
+						height:sortVal[num]
+					}).addClass("col_show").html(sortVal[num]);
+					num++;
+					if(num >=sortVal.length){
+						num=0;
+						$(".btn").removeAttr("disabled");
+						clearInterval(timer);
+						
+					}
+				},100);
+			})
+			
+			function quick_sort(arr,index) {
+				console.time('计时器');
+				if(arr.length <=1){
+					return arr;
+				}else{				
+					
+					
+					var refer_index = index>1?Math.floor(arr.length/index):arr.length-1;
+					$(".clo").eq(refer_index).addClass("col_show");
+					var refer = arr.splice(refer_index,1)[0];
+					var left_sort = new Array();
+					var right_sort = new Array();
+							for(var i = 0; i<arr.length;i++){
+									if(arr[i] < refer){
+										$(".clo").eq(i).addClass("col_show");
+										left_sort.push(arr[i]);	
+									}else {
+										right_sort.push(arr[i]);
+									}
+							}
+				return quick_sort(left_sort,index).concat([refer],quick_sort(right_sort,index));	
+				
+				}
+				console.timeEnd('计时器');
+			}
+		</script>
+</html>
